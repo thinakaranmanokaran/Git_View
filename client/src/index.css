@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@font-face {
+    font-family: sansheavy;
+    src: url(./assets/fonts/sans/SF-Pro-Display-Bold.otf);
+}
+
+@font-face {
+    font-family: sansnormal;
+    src: url(./assets/fonts/louis/Louis-George-Cafe.ttf);
+}
+
+@theme {
+    /* fonts */
+    --font-sansheavy: "sansheavy", sans-serif; 
+    --font-sansnormal: "sansnormal", sans-serif; 
+    
+    /* colors */
+    --color-dark: #0C0C0C; 
+}
