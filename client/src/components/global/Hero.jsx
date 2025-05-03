@@ -14,7 +14,7 @@ const Hero = () => {
                     </p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-4 w-full max-w-sm mx-auto">
-                    <Link to="/thinakaranmanokaran/Bank_Management"
+                    <Link to="/facebook/react"
                         size="lg"
                         className="w-full bg-[#2463EB] hover:bg-[#2463EB] flex justify-center space-x-1 text-white py-4 rounded-2xl items-center font-general shadow-lg shadow-primary/20 text-lg shadow-[#2463EB]"
                     >

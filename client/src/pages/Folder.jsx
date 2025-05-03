@@ -57,7 +57,7 @@ const FolderPage = () => {
                 </div>
             )}
 
-            <ul className='flex flex-wrap w-full'>
+            <ul className='flex flex-wrap w-full justify-evenly gap-y-3 '>
                 {[...files]
                     .sort((a, b) => {
                         if (a.type === 'dir' && b.type !== 'dir') return -1;
