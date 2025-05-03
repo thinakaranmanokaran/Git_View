@@ -10,11 +10,25 @@
     src: url(./assets/fonts/louis/Louis-George-Cafe.ttf);
 }
 
+@font-face {
+    font-family: general;
+    src: url(./assets/fonts/general/GeneralSans-Regular.otf);
+}
+
+@font-face {
+    font-family: generalbold;
+    src: url(./assets/fonts/general/GeneralSans-Bold.otf);
+}
+
 @theme {
     /* fonts */
     --font-sansheavy: "sansheavy", sans-serif; 
     --font-sansnormal: "sansnormal", sans-serif; 
+    --font-general: "general", sans-serif; 
+    --font-generalbold: "generalbold", sans-serif; 
     
     /* colors */
     --color-dark: #0C0C0C; 
+    --color-grey: #D9EAFD20; 
+    --color-blue: #A0DEFF; 
 }
