@@ -3,6 +3,7 @@ import { useParams, useLocation, Link } from 'react-router-dom'
 import axios from 'axios'
 import images from '../assets/images'
 import { IoIosArrowForward } from "react-icons/io";
+import CodeViewer from '../components/global/CodeViewer';
 
 const FolderPage = () => {
     const { username, repo } = useParams()
@@ -10,6 +11,9 @@ const FolderPage = () => {
     const path = location.pathname.replace(`/${username}/${repo}`, '').replace(/^\/+/, '') || ''
 
     const [files, setFiles] = useState([])
+    const [fileContent, setFileContent] = useState(null);
+    const [fileName, setFileName] = useState('');
+    const [isPrivateRepo, setIsPrivateRepo] = useState(false)
 
     const API_URL = import.meta.env.VITE_API_URL
     const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN
@@ -21,9 +25,68 @@ const FolderPage = () => {
                     Authorization: `Bearer ${GITHUB_TOKEN}`,
                 },
             })
-            .then((res) => setFiles(res.data))
-            .catch((err) => console.error(err))
-    }, [username, repo, path])
+            .then(async (res) => {
+                const fileList = res.data;
+
+                const updatedFiles = await Promise.all(
+                    fileList.map(async (file) => {
+                        if (file.type === 'dir') {
+                            try {
+                                const folderRes = await axios.get(file.url, {
+                                    headers: {
+                                        Authorization: `Bearer ${GITHUB_TOKEN}`,
+                                    },
+                                });
+
+                                return {
+                                    ...file,
+                                    hasContent: folderRes.data.length > 0,
+                                };
+                            } catch (err) {
+                                console.error('Folder fetch error:', err);
+                                return { ...file, hasContent: false };
+                            }
+                        }
+                        return file;
+                    })
+                );
+
+                setFiles(updatedFiles);
+            })
+            .catch((err) => {
+                if (err.response && (err.response.status === 403 || err.response.status === 404)) {
+                    setIsPrivateRepo(true);
+                } else {
+                    console.error('Main fetch error:', err);
+                }
+            });
+
+    }, [username, repo, path]);
+
+
+    useEffect(() => {
+        const fileName = path.split('/').pop()
+        const isFile = /\.[a-z0-9]+$/i.test(fileName)  // crude check for file
+
+        if (isFile) {
+            fetch(`https://raw.githubusercontent.com/${username}/${repo}/main/${path}`)
+                .then((res) => res.text())
+                .then((text) => {
+                    setFileContent(text)
+                    setFileName(fileName)
+                })
+        } else {
+            setFileContent(null)
+            setFileName('')
+        }
+    }, [path])
+
+    const nonCodeExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.mp4', '.webm', '.mov', '.pdf', '.zip', '.ico', '.webp'];
+
+    const isCodeFile = fileName && !nonCodeExtensions.some(ext => fileName.toLowerCase().endsWith(ext));
+
+
+
 
     return (
         <div className="bg-dark text-white min-h-screen p-2" >
@@ -57,44 +120,61 @@ const FolderPage = () => {
                 </div>
             )}
 
-            <ul className='flex flex-wrap w-full justify-evenly gap-y-3 '>
-                {[...files]
-                    .sort((a, b) => {
-                        if (a.type === 'dir' && b.type !== 'dir') return -1;
-                        if (a.type !== 'dir' && b.type === 'dir') return 1;
-                        return a.name.localeCompare(b.name);
-                    })
-                    .map((file) => (
-                        <li key={file.sha}>
-                            <Link
-                                to={`/${username}/${repo}/${path ? path + '/' : ''}${file.name}`}
-                                className="flex flex-col items-center w-fit min-w-40 gap-2 p-2 hover:bg-grey rounded-md transition duration-200 ease-in-out max-w-48"
-                            >
-                                <img
-                                    src={
-                                        file.type === 'dir'
-                                            ? images.EmptyFolder
-                                            : /\.(png|jpe?g|svg)$/i.test(file.name)
-                                                ? file.download_url
-                                                : /\.(js)$/i.test(file.name)
-                                                    ? images.JavaScript
-                                                    : /\.(py)$/i.test(file.name)
-                                                        ? images.Python
-                                                        : images.File
-                                    }
-                                    alt={file.name}
-                                    className='w-24 h-24 object-contain rounded shadow'
-                                />
-                                <div className='text-center text-xs font-general tracking-wide break-words'>
-                                    {file.name}
-                                </div>
-                            </Link>
+            {
+                isPrivateRepo ? (
+                    <div className="text-center text-red-500 text-lg mt-10">
+                        This repository is <span className="font-bold">private</span> and cannot be accessed due to our terms and permissions.
+                    </div>
+                ) : (
+                    fileContent && isCodeFile ? (
+                        <CodeViewer content={fileContent} filename={fileName} />
+                    ) : (
 
-                        </li>
-                    ))}
-            </ul>
+                        <ul className='w-full grid grid-cols-8 gap-y-3 '>
+                            {Array.isArray(files) && files
+                                .sort((a, b) => {
+                                    if (a.type === 'dir' && b.type !== 'dir') return -1;
+                                    if (a.type !== 'dir' && b.type === 'dir') return 1;
+                                    return a.name.localeCompare(b.name);
+                                })
+                                .map((file) => (
+                                    <li key={file.sha}>
+                                        <Link
+                                            to={`/${username}/${repo}/${path ? path + '/' : ''}${file.name}`}
+                                            className="flex flex-col items-center w-fit min-w-40 gap-2 p-2 hover:bg-grey rounded-md transition duration-200 ease-in-out max-w-48" title={file.name}
+                                        >
+                                            <img
+                                                src={
+                                                    file.type === 'dir'
+                                                        ? file.hasContent
+                                                            ? images.DataFolder
+                                                            : images.EmptyFolder
+                                                        : /\.(png|jpe?g|svg)$/i.test(file.name)
+                                                            ? file.download_url
+                                                            : /\.(js)$/i.test(file.name)
+                                                                ? images.JavaScript
+                                                                : /\.(py)$/i.test(file.name)
+                                                                    ? images.Python
+                                                                    : images.File
+                                                }
+                                                alt={file.name}
+                                                className='w-24 h-24 object-contain rounded shadow'
+                                            />
 
-        </div>
+                                            <div className='text-center w-4/5 text-xs font-general tracking-wide break-words'>
+                                                {file.name}
+                                            </div>
+                                        </Link>
+
+                                    </li>
+                                ))}
+                        </ul>
+                    )
+
+                )
+            }
+
+        </div >
     )
 }
 
