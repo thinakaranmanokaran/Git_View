@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from 'react'
-import { useParams, useLocation, Link } from 'react-router-dom'
-import axios from 'axios'
-import images from '../assets/images'
+import React, { useEffect, useState } from 'react';
+import { useParams, useLocation, Link } from 'react-router-dom';
+import axios from 'axios';
+import images from '../assets/images';
 import { IoIosArrowForward } from "react-icons/io";
 import CodeViewer from '../components/global/CodeViewer';
 
 const FolderPage = () => {
-    const { username, repo } = useParams()
-    const location = useLocation()
-    const path = location.pathname.replace(`/${username}/${repo}`, '').replace(/^\/+/, '') || ''
+    const { username, repo } = useParams();
+    const location = useLocation();
+    const path = location.pathname.replace(`/${username}/${repo}`, '').replace(/^\/+/, '') || '';
 
-    const [files, setFiles] = useState([])
+    const [files, setFiles] = useState([]);
     const [fileContent, setFileContent] = useState(null);
     const [fileName, setFileName] = useState('');
-    const [isPrivateRepo, setIsPrivateRepo] = useState(false)
+    const [isPrivateRepo, setIsPrivateRepo] = useState(false);
 
-    const API_URL = import.meta.env.VITE_API_URL
-    const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN
+    const API_URL = import.meta.env.VITE_API_URL;
+    const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN;
 
     useEffect(() => {
         axios
@@ -60,47 +60,45 @@ const FolderPage = () => {
                     console.error('Main fetch error:', err);
                 }
             });
-
     }, [username, repo, path]);
 
-
     useEffect(() => {
-        const fileName = path.split('/').pop()
-        const isFile = /\.[a-z0-9]+$/i.test(fileName)  // crude check for file
+        const fileName = path.split('/').pop();
+        const isFile = /\.[a-z0-9]+$/i.test(fileName);  // crude check for file
 
         if (isFile) {
             fetch(`https://raw.githubusercontent.com/${username}/${repo}/main/${path}`)
                 .then((res) => res.text())
                 .then((text) => {
-                    setFileContent(text)
-                    setFileName(fileName)
-                })
+                    setFileContent(text);
+                    setFileName(fileName);
+                });
         } else {
-            setFileContent(null)
-            setFileName('')
+            setFileContent(null);
+            setFileName('');
         }
-    }, [path])
+    }, [path]);
 
     const nonCodeExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.mp4', '.webm', '.mov', '.pdf', '.zip', '.ico', '.webp'];
 
-    const isCodeFile = fileName && !nonCodeExtensions.some(ext => fileName.toLowerCase().endsWith(ext));
-
-
-
+    const isCodeFile = (fileName) => {
+        return !nonCodeExtensions.some(ext => fileName.toLowerCase().endsWith(ext));
+    };
 
     return (
-        <div className="bg-dark text-white min-h-screen p-2" >
-            <h2 className='text-4xl font-generalbold my-6 flex justify-center  ' >
-                <Link to={`/${username}/${repo}`} className='text-4xl text-center w-fit  ' >{repo}</Link>
+        <div className="bg-dark text-white min-h-screen p-2 overflow-x-hidden">
+            <h2 className='text-4xl font-generalbold my-6 flex justify-center'>
+                <Link to={`/${username}/${repo}`} className='text-xl md:text-4xl text-center w-fit'>{repo}</Link>
             </h2>
+
             {/* Breadcrumb path like src > components > users */}
-            <div className='flex justify-center px-4  items-center gap-2 my-4 text-sm font-medium'>
+            <div className='flex justify-start md:justify-center px-4 overflow-x-scroll md:overflow-hidden items-center gap-2 my-4 text-sm font-medium'>
                 {path
                     ? path.split('/').map((part, index, arr) => {
                         const subPath = arr.slice(0, index + 1).join('/');
                         return (
                             <span key={index} className="flex items-center gap-1">
-                                <Link to={`/${username}/${repo}/${subPath}`} className="bg-grey px-3 py-2 rounded-full  hover:bg-blue hover:text-dark transition-colors ">
+                                <Link to={`/${username}/${repo}/${subPath}`} className="bg-grey px-3 py-2 rounded-full hover:bg-blue hover:text-dark transition-colors line-clamp-1 ">
                                     {part}
                                 </Link>
                                 {index < arr.length - 1 && <span className="text-white"><IoIosArrowForward /></span>}
@@ -109,11 +107,12 @@ const FolderPage = () => {
                     })
                     : <span className="text-gray-400"></span>}
             </div>
+
             {path && (
                 <div className='text-center mb-4'>
                     <Link
                         to={`/${username}/${repo}/${path.split('/').slice(0, -1).join('/')}`}
-                        className="absolute top-6 left-4 font-general px-4 py-2 bg-grey text-white rounded-xl hover:scale-105 transition"
+                        className="absolute hidden md:block top-6 left-4 font-general px-4 py-2 bg-grey text-white rounded-xl hover:scale-105 transition"
                     >
                         Back
                     </Link>
@@ -126,11 +125,10 @@ const FolderPage = () => {
                         This repository is <span className="font-bold">private</span> and cannot be accessed due to our terms and permissions.
                     </div>
                 ) : (
-                    fileContent && isCodeFile ? (
+                    fileContent && isCodeFile(fileName) ? (
                         <CodeViewer content={fileContent} filename={fileName} />
                     ) : (
-
-                        <ul className='w-full grid grid-cols-8 gap-y-3 '>
+                        <ul className='w-full grid grid-cols-2 md:grid-cols-8 gap-y-3'>
                             {Array.isArray(files) && files
                                 .sort((a, b) => {
                                     if (a.type === 'dir' && b.type !== 'dir') return -1;
@@ -140,8 +138,12 @@ const FolderPage = () => {
                                 .map((file) => (
                                     <li key={file.sha}>
                                         <Link
-                                            to={`/${username}/${repo}/${path ? path + '/' : ''}${file.name}`}
-                                            className="flex flex-col items-center w-fit min-w-40 gap-2 p-2 hover:bg-grey rounded-md transition duration-200 ease-in-out max-w-48" title={file.name}
+                                            to={isCodeFile(file.name)
+                                                ? `/${username}/${repo}/${path ? path + '/' : ''}${file.name}`
+                                                : undefined  // Non-code files won't show up in the URL
+                                            }
+                                            className="flex flex-col items-center w-fit min-w-40 gap-2 p-2 hover:bg-grey rounded-md transition duration-200 ease-in-out max-w-48"
+                                            title={file.name}
                                         >
                                             <img
                                                 src={
@@ -160,22 +162,18 @@ const FolderPage = () => {
                                                 alt={file.name}
                                                 className='w-24 h-24 object-contain rounded shadow'
                                             />
-
                                             <div className='text-center w-4/5 text-xs font-general tracking-wide break-words'>
                                                 {file.name}
                                             </div>
                                         </Link>
-
                                     </li>
                                 ))}
                         </ul>
                     )
-
                 )
             }
+        </div>
+    );
+};
 
-        </div >
-    )
-}
-
-export default FolderPage
+export default FolderPage;
