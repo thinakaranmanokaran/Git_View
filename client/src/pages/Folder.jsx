@@ -198,7 +198,7 @@ const FolderPage = () => {
                     <button
                         onClick={handleDownloadFolder}
                         disabled={isLoading || status}
-                        className={`absolute hidden  bottom-6 right-4 font-general px-4 py-2 bg-grey text-white rounded-xl hover:scale-105 transition-all duration-300 md:flex justify-center disabled:cursor-not-allowed disabled:hover:scale-100  cursor-pointer ${isLoading ? "w-16" : status ? "w-80" : "w-52 "}`}
+                        className={`fixed hidden  bottom-6 right-4 font-general px-4 py-2 bg-grey text-white rounded-xl hover:scale-105 transition-all duration-300 md:flex justify-center disabled:cursor-not-allowed disabled:hover:scale-100  cursor-pointer ${isLoading ? "w-16" : status ? "w-80" : "w-52 "}`}
                     >
                         {  isLoading ?  (<div className='w-6 h-6  border-dark border-2 rounded-full border-t-white animate-spin ' ></div> ) : status ? (<p>{status}</p>) : (<span>Download This Folder</span>) }
                     </button>
