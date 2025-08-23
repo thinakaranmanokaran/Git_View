@@ -135,4 +135,4 @@ Thinakaran Manokaran, Git View, Git GUI tool, Electron Git explorer, open‑sour
 
 ---
 
-*Crafted with ❤️ by **Thinakaran Manokaran***  
+*Crafted with ❤️ by **Thinakaran Manokaran***   
