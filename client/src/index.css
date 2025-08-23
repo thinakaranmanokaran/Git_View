@@ -20,15 +20,33 @@
     src: url(./assets/fonts/general/GeneralSans-Bold.otf);
 }
 
+@font-face {
+    font-family: interblack;
+    src: url(./assets/fonts/plein/Plein-Bold.otf);
+}
+
 @theme {
     /* fonts */
     --font-sansheavy: "sansheavy", sans-serif; 
     --font-sansnormal: "sansnormal", sans-serif; 
     --font-general: "general", sans-serif; 
     --font-generalbold: "generalbold", sans-serif; 
+    --font-pleinbold: "interblack", sans-serif; 
     
     /* colors */
     --color-dark: #0C0C0C; 
     --color-grey: #D9EAFD20; 
     --color-blue: #A0DEFF; 
+
+    /* borders */
+    --border-1: border 1px solid;
+}
+
+.scrollbar-none{
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer and Edge */
+}
+
+.scrollbar-none::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
 }

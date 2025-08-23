@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useLocation, Link } from 'react-router-dom';
 import axios from 'axios';
 
-import { Breadcrumbs, DownloadButton, ErrorMessageBox, FileGrid, FilePreview, LoaderBar } from '../components';
+import { Breadcrumbs, DownloadButton, ErrorMessageBox, FileGrid, FilePreview, FolderHeader, FolderNavigation, LoaderBar } from '../components';
 
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
@@ -221,33 +221,25 @@ const FolderPage = () => {
     }
 
     return (
-        <div className="bg-dark text-white min-h-screen p-2 overflow-x-hidden">
-            <h2 className='text-4xl font-generalbold my-6 w-screen flex justify-center'>
-                <Link onClick={clearStates} to={`/${username}/${repo}`} className='text-xl md:text-4xl'>
-                    {repo}
+        <div className="bg-dark text-white min-h-screen py-2 overflow-x-hidden">
+            <h2 className=' pl-4 font-pleinbold tracking-tighter my-3  w-screen flex justify-start '>
+                <Link onClick={clearStates} to={`/${username}/${repo}`} className='text-xl md:text-8xl'>
+                    <span className='text-[#ffffff50]'>{username}/</span>{repo}
                 </Link>
             </h2>
-
-            <Breadcrumbs username={username} repo={repo} path={path} clearStates={clearStates} />
-
-            {path && (
-                <div className="text-center mb-4">
-                    <Link onClick={clearStates}
-                        to={`/${username}/${repo}/${path.split('/').slice(0, -1).join('/')}`}
-                        className="absolute hidden md:block top-6 left-4 font-general px-4 py-2 bg-grey text-white rounded-xl hover:scale-105 transition">
-                        Back
-                    </Link>
-                    <DownloadButton handleDownloadFolder={handleDownloadFolder} isLoading={isLoading} status={status} />
-                </div>
-            )}
+            <FolderHeader clearStates={clearStates} path={path} repo={repo} username={username} handleDownloadFolder={handleDownloadFolder} isLoading={isLoading} />
 
             {errorMessage ? (
                 <ErrorMessageBox errorMessage={errorMessage} errorCode={errorCode} username={username} fetchFiles={fetchFiles} />
-            ) : (
-                fileContent
-                    ? <FilePreview fileContent={fileContent} fileName={fileName} isCodeFile={isCodeFile} />
-                    : <FileGrid files={files} username={username} repo={repo} path={path} clearStates={clearStates} isCodeFile={isCodeFile} />
-            )}
+            ) :
+                <div className='w-full flex justify-start h-full'>
+                    <FolderNavigation API_URL={API_URL} GITHUB_TOKEN={GITHUB_TOKEN} files={files} repo={repo} username={username} path={path} />
+                    {fileContent
+                        ? <FilePreview fileContent={fileContent} fileName={fileName} isCodeFile={isCodeFile} />
+                        : <FileGrid files={files} username={username} repo={repo} path={path} clearStates={clearStates} isCodeFile={isCodeFile} />
+                    }
+                </div>
+            }
 
             <LoaderBar showLoader={showLoader} progress={progress} />
         </div>

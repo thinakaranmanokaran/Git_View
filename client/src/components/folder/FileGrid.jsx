@@ -3,7 +3,7 @@ import images from "../../assets/images";
 
 const FileGrid = ({ files, username, repo, path, clearStates, isCodeFile }) => {
     return (
-        <ul className='w-full grid grid-cols-2 md:grid-cols-8 gap-y-3'>
+        <ul className='w-full grid grid-cols-2 mx-2 my-6 md:grid-cols-8 gap-y-3 h-fit'>
             {Array.isArray(files) && files
                 .sort((a, b) => {
                     if (a.type === 'dir' && b.type !== 'dir') return -1;
@@ -15,7 +15,7 @@ const FileGrid = ({ files, username, repo, path, clearStates, isCodeFile }) => {
                         <Link
                             to={isCodeFile(file.name) ? `/${username}/${repo}/${path ? path + '/' : ''}${file.name}` : undefined}
                             onClick={clearStates}
-                            className="flex flex-col items-center w-fit min-w-40 gap-2 p-2 hover:bg-grey rounded-md transition max-w-48"
+                            className="flex flex-col items-center gap-2 p-2 hover:bg-grey rounded-md transition max-w-40"
                             title={file.name}
                         >
                             <img
