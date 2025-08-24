@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
+import { Link } from "react-router-dom"
 
 const Navigation = ({ folder, files, API_URL, GITHUB_TOKEN, username, repo, path }) => {
     const [isOpen, setIsOpen] = useState(true);
@@ -62,7 +63,7 @@ const Navigation = ({ folder, files, API_URL, GITHUB_TOKEN, username, repo, path
                 <div key={file.sha}>
                     <div className='flex items-center h-10 pl-3 overflow-hidden hover:bg-grey rounded-md transition justify-between  '
                         style={{ marginLeft: `${depth * 20 + 12}px` }}>
-                        <div className='text-[15px] '>{file.name}</div>
+                        <Link to={`/${username}/${repo}/${file.path}`} className='text-[15px] flex items-center cursor-pointer w-full h-full '>{file.name}</Link>
                         {file.type === 'dir' &&
                             (
                                 openFolders.includes(file.sha) ?
