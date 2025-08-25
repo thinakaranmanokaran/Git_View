@@ -6,3 +6,4 @@ export { default as FilePreview } from "./folder/FilePreview";
 export { default as LoaderBar } from "./folder/LoaderBar";
 export { default as FolderHeader } from "./folder/Header";
 export { default as FolderNavigation } from "./folder/Navigation";
+export { default as FolderTitle } from "./folder/Title";

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useLocation, Link } from 'react-router-dom';
 import axios from 'axios';
 
-import { Breadcrumbs, DownloadButton, ErrorMessageBox, FileGrid, FilePreview, FolderHeader, FolderNavigation, LoaderBar } from '../components';
+import { Breadcrumbs, DownloadButton, ErrorMessageBox, FileGrid, FilePreview, FolderHeader, FolderNavigation, FolderTitle, LoaderBar } from '../components';
 
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
@@ -222,11 +222,7 @@ const FolderPage = () => {
 
     return (
         <div className="bg-dark text-white min-h-screen py-2 overflow-x-hidden">
-            <h2 className=' pl-4 font-pleinbold tracking-tighter my-3  w-screen flex justify-start '>
-                <Link onClick={clearStates} to={`/${username}/${repo}`} className='text-xl md:text-8xl'>
-                    <span className='text-[#ffffff50]'>{username}/</span>{repo}
-                </Link>
-            </h2>
+            <FolderTitle clearStates={clearStates} repo={repo} username={username} />
             <FolderHeader clearStates={clearStates} path={path} repo={repo} username={username} handleDownloadFolder={handleDownloadFolder} isLoading={isLoading} />
 
             {errorMessage ? (
