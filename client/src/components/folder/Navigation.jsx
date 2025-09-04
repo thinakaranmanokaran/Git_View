@@ -73,7 +73,7 @@ const Navigation = ({ API_URL, GITHUB_TOKEN, username, repo }) => {
                         <div
                             className={`
                             flex items-center h-10 pl-3 overflow-hidden rounded-r-md transition justify-between 
-                            ${isOpen && file.type === 'dir' ? 'bg-gray-800' : 'hover:bg-gray-700'} 
+                            ${isOpen && file.type === 'dir' ? 'bg-[#ffffff20]' : 'hover:bg-[#ffffff10] '} 
                             ${depth > 0 ? 'border-l border-gray-600' : ''}
                         `}
                             style={{ marginLeft: `${depth * 20 + 12}px` }}
@@ -82,14 +82,19 @@ const Navigation = ({ API_URL, GITHUB_TOKEN, username, repo }) => {
                             <Link
                                 to={`/${username}/${repo}/${file.path}`}
                                 className="text-[15px] flex items-center cursor-pointer w-full h-full"
+                                onClick={(e) => {
+                                    if (file.type === "dir") {
+                                        e.preventDefault(); // prevent immediate navigation
+                                        handleToggle(file); // expand/collapse
+                                    }
+                                    // if it's a file → normal navigation happens
+                                }}
                             >
                                 <span
-                                    className={`text-lg mr-1 ${file.type === 'dir'
-                                            ? 'text-blue'
-                                            : 'text-gray-400'
+                                    className={`text-lg mr-1 ${file.type === "dir" ? "text-blue" : "text-gray-400"
                                         }`}
                                 >
-                                    {file.type === 'dir'
+                                    {file.type === "dir"
                                         ? isOpen
                                             ? <IoFolderOpen />
                                             : <IoFolder />
@@ -101,7 +106,7 @@ const Navigation = ({ API_URL, GITHUB_TOKEN, username, repo }) => {
                             {/* Folder Toggle Icon */}
                             {file.type === 'dir' && (
                                 <div
-                                    className="flex items-center hover:bg-gray-600 px-2 h-full"
+                                    className={`flex items-center hover:bg-[#ffffff40] ${isOpen && "bg-[#ffffff40]"} px-2 h-full`}
                                     onClick={() => handleToggle(file)}
                                 >
                                     {loadingFolders[file.sha] ? (
@@ -124,7 +129,7 @@ const Navigation = ({ API_URL, GITHUB_TOKEN, username, repo }) => {
 
 
     return (
-        <div className='min-w-56 sticky top-20 select-none w-fit max-w-66 py-3 border-grey border-b-1 border-r-1 flex flex-col justify-start px-1 h-full max-h-[80vh] overflow-y-auto scrollbar-none'>
+        <div className='min-w-56 sticky top-20 select-none w-fit max-w-66 py-3 border-grey border-b-1 border-r-1 flex flex-col justify-start px-1 h-full min-h-[50vh] max-h-[80vh] overflow-y-auto scrollbar-none'>
             {Array.isArray(allFiles) && renderFiles(allFiles)}
         </div>
     );

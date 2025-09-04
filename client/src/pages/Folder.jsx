@@ -62,28 +62,33 @@ const FolderPage = () => {
 
             const fileList = res.data;
 
-            const updatedFiles = await Promise.all(
-                fileList.map(async (file) => {
-                    if (file.type === 'dir') {
-                        try {
-                            const folderRes = await axios.get(file.url, {
-                                headers: {
-                                    Authorization: `Bearer ${GITHUB_TOKEN}`,
-                                },
-                            });
-
-                            return {
-                                ...file,
-                                hasContent: folderRes.data.length > 0,
-                            };
-                        } catch (err) {
-                            console.error('Folder fetch error:', err);
-                            return { ...file, hasContent: false };
+            let updatedFiles = [];
+            if (Array.isArray(fileList)) {
+                updatedFiles = await Promise.all(
+                    fileList.map(async (file) => {
+                        if (file.type === 'dir') {
+                            try {
+                                const folderRes = await axios.get(file.url, {
+                                    headers: {
+                                        Authorization: `Bearer ${GITHUB_TOKEN}`,
+                                    },
+                                });
+                                return {
+                                    ...file,
+                                    hasContent: folderRes.data.length > 0,
+                                };
+                            } catch (err) {
+                                console.error('Folder fetch error:', err);
+                                return { ...file, hasContent: false };
+                            }
                         }
-                    }
-                    return file;
-                })
-            );
+                        return file;
+                    })
+                );
+            } else {
+                // it's a file object, not array
+                updatedFiles = [fileList];
+            }
 
             setFiles(updatedFiles);
             setErrorMessage(""); // clear old error if retry succeeds
@@ -100,8 +105,9 @@ const FolderPage = () => {
                     setErrorCode(2);
                 }
             } else {
+                console.error("Axios error object:", err);
                 setErrorMessage("Network error. Please try again.");
-                setErrorCode(3)
+                setErrorCode(3);
             }
         } finally {
             setIsLoading(false); // stop loader once done
