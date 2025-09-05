@@ -1,4 +1,4 @@
-import React from "react";
+import React, { use, useEffect } from "react";
 import Editor from "@monaco-editor/react";
 
 // Simple Night Owl theme JSON (you can extend this if needed)
@@ -42,8 +42,14 @@ const CodeViewer = ({ content, filename }) => {
         monaco.editor.setTheme("night-owl");
     };
 
+    useEffect(() => {
+        console.log("CodeViewer content:", content);
+        console.log("CodeViewer filename:", filename);
+        // alert(filename);
+    }, [content, filename]);
+
     return (
-        <div className="w-full bg-[#1e1e1e] py-8 px-0  h-[500px]">
+        <div className="w-full bg-[#1e1e1e] py-8 px-0  min-h-[500px]">
             <Editor
                 height="100%"
                 defaultLanguage={getLanguage(filename)}

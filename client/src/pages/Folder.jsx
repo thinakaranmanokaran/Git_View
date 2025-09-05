@@ -22,10 +22,28 @@ const FolderPage = () => {
     const [showLoader, setShowLoader] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [errorCode, setErrorCode] = useState(0);
+    const [defaultBranch, setDefaultBranch] = useState("main");
 
     const API_URL = import.meta.env.VITE_API_URL;
     const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN;
 
+    const fetchDefaultBranch = async () => {
+        try {
+            const res = await axios.get(`${API_URL}/repos/${username}/${repo}`, {
+                headers: {
+                    Authorization: `Bearer ${GITHUB_TOKEN}`,
+                },
+            });
+            setDefaultBranch(res.data.default_branch || "main");
+        } catch (err) {
+            console.error("Error fetching default branch:", err);
+            setDefaultBranch("main"); // fallback
+        }
+    };
+
+    useEffect(() => {
+        fetchDefaultBranch();
+    }, [username, repo]);
 
     useEffect(() => {
         let interval;
@@ -118,21 +136,20 @@ const FolderPage = () => {
         fetchFiles();
     }, [username, repo, path]);
 
-
     useEffect(() => {
         const fetchFile = async () => {
-            const fileName = path.split('/').pop();
-            const isFile = /\.[a-z0-9]+$/i.test(fileName);
+            // Check if the current path corresponds to a file in the files array
+            const currentFile = files.find(file => file.path === path);
 
-            if (isFile) {
+            if (currentFile && currentFile.type === 'file') {
                 setIsLoading(true);
                 try {
                     const res = await fetch(
-                        `https://raw.githubusercontent.com/${username}/${repo}/main/${path}`
+                        `https://raw.githubusercontent.com/${username}/${repo}/${defaultBranch}/${path}`
                     );
                     const text = await res.text();
                     setFileContent(text);
-                    setFileName(fileName);
+                    setFileName(currentFile.name);
                 } catch (err) {
                     console.error("File fetch error:", err);
                 } finally {
@@ -144,8 +161,10 @@ const FolderPage = () => {
             }
         };
 
-        fetchFile();
-    }, [path]);
+        if (files.length > 0) {
+            fetchFile();
+        }
+    }, [path, files, username, repo]);
 
     const nonCodeExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.mp4', '.webm', '.mov', '.pdf', '.zip', '.ico', '.webp'];
 
@@ -160,11 +179,11 @@ const FolderPage = () => {
         const zip = new JSZip();
         const basePath = path || '';
         const folderName = basePath || repo;
-        const RAW_BASE = `https://raw.githubusercontent.com/${username}/${repo}/main`;
+        const RAW_BASE = `https://raw.githubusercontent.com/${username}/${repo}/${defaultBranch}`;
 
         try {
             const treeRes = await axios.get(
-                `${API_URL}/repos/${username}/${repo}/git/trees/main?recursive=1`
+                `${API_URL}/repos/${username}/${repo}/git/trees/${defaultBranch}?recursive=1`
             );
             const allFiles = treeRes.data.tree.filter(item => item.type === 'blob');
 
@@ -216,11 +235,7 @@ const FolderPage = () => {
         }
     };
 
-
     const clearStates = () => {
-        // setFiles([]);
-        // setFileContent(null);
-        // setFileName('');
         setIsPrivateRepo(false);
         setStatus("");
         setIsLoading(false);

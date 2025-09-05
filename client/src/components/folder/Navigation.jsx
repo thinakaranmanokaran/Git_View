@@ -84,15 +84,14 @@ const Navigation = ({ API_URL, GITHUB_TOKEN, username, repo }) => {
                                 className="text-[15px] flex items-center cursor-pointer w-full h-full"
                                 onClick={(e) => {
                                     if (file.type === "dir") {
-                                        e.preventDefault(); // prevent immediate navigation
+                                        e.preventDefault(); // stop navigation for folders
                                         handleToggle(file); // expand/collapse
                                     }
-                                    // if it's a file → normal navigation happens
+                                    // for files → DO NOT preventDefault → navigation works
                                 }}
                             >
                                 <span
-                                    className={`text-lg mr-1 ${file.type === "dir" ? "text-blue" : "text-gray-400"
-                                        }`}
+                                    className={`text-lg mr-1 ${file.type === "dir" ? "text-blue" : "text-gray-400"}`}
                                 >
                                     {file.type === "dir"
                                         ? isOpen
