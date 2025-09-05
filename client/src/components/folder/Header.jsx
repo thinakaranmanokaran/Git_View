@@ -19,6 +19,7 @@ const Header = ({
     const [searchResults, setSearchResults] = useState([]);
     const [allFiles, setAllFiles] = useState([]); // 🔥 store full repo tree
     const searchRef = useRef(null);
+    const [avatar, setAvatar] = useState(""); // 🔥 store avatar
 
     const API_URL = import.meta.env.VITE_API_URL;
     const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN;
@@ -39,6 +40,21 @@ const Header = ({
         };
         fetchBranch();
     }, [username, repo]);
+
+    // ✅ fetch avatar
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const res = await axios.get(`${API_URL}/users/${username}`, {
+                    headers: { Authorization: `Bearer ${GITHUB_TOKEN}` },
+                });
+                setAvatar(res.data.avatar_url);
+            } catch (err) {
+                console.error("Error fetching user avatar:", err);
+            }
+        };
+        if (username) fetchUser();
+    }, [username]);
 
     // ✅ fetch entire repo tree once
     useEffect(() => {
@@ -78,6 +94,22 @@ const Header = ({
         setSearchQuery("");
         setSearchResults([]);
     };
+
+    // ✅ Keyboard shortcut (Ctrl + K)
+    useEffect(() => {
+        const handleShortcut = (e) => {
+            if (e.ctrlKey && e.key.toLowerCase() === "k") {
+                e.preventDefault();
+                toggleSearchBar();
+            }
+        };
+
+        window.addEventListener("keydown", handleShortcut);
+        return () => {
+            window.removeEventListener("keydown", handleShortcut);
+        };
+    }, []);
+
 
     // ✅ Debounced global search
     useEffect(() => {
@@ -147,11 +179,17 @@ const Header = ({
                 </div>
 
                 {/* ⬇️ Download */}
-                <DownloadButton
-                    handleDownloadFolder={handleDownloadFolder}
-                    isLoading={isLoading}
-                    status={status}
-                />
+                <div className="flex space-x-2">
+                    <DownloadButton
+                        handleDownloadFolder={handleDownloadFolder}
+                        isLoading={isLoading}
+                        status={status}
+                    />
+                    <Link to={`/${username}`} className={` px-3 py-2 bg-grey text-white cursor-pointer rounded-xl transition-all duration-300 md:flex hidden justify-center disabled:cursor-not-allowed disabled:hover:scale-100 hover:scale-105`}>
+                        <img src={avatar} alt="Profile" className="w-6 h-6 rounded-full mr-1 " />
+                        Profile
+                    </Link>
+                </div>
             </div>
         </div>
     );

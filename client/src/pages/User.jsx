@@ -27,7 +27,13 @@ const User = () => {
                     })
                 ]);
 
-                setUserData(userRes.data);
+                // Calculate total stars across repos
+                const totalStars = repoRes.data.reduce(
+                    (acc, repo) => acc + repo.stargazers_count,
+                    0
+                );
+
+                setUserData({ ...userRes.data, total_stars: totalStars });
                 setRepos(repoRes.data);
                 setErrorMessage('');
             } catch (err) {
@@ -42,7 +48,7 @@ const User = () => {
     }, [username]);
 
     return (
-        <div className="bg-dark text-white min-h-screen p-4">
+        <div className="bg-dark text-white min-h-screen px-16 py-20">
             {errorMessage ? (
                 <ErrorMessageBox errorMessage={errorMessage} />
             ) : (

@@ -16,6 +16,11 @@
 }
 
 @font-face {
+    font-family: generallight;
+    src: url(./assets/fonts/general/GeneralSans-Light.otf);
+}
+
+@font-face {
     font-family: generalbold;
     src: url(./assets/fonts/general/GeneralSans-Bold.otf);
 }
@@ -25,13 +30,20 @@
     src: url(./assets/fonts/plein/Plein-Bold.otf);
 }
 
+@font-face {
+    font-family: intermid;
+    src: url(./assets/fonts/plein/Plein-Regular.otf);
+}
+
 @theme {
     /* fonts */
     --font-sansheavy: "sansheavy", sans-serif;
     --font-sansnormal: "sansnormal", sans-serif;
     --font-general: "general", sans-serif;
+    --font-generallight: "generallight", sans-serif;
     --font-generalbold: "generalbold", sans-serif;
     --font-pleinbold: "interblack", sans-serif;
+    --font-intermid: "intermid", sans-serif;
 
     /* colors */
     --color-dark: #0C0C0C;
