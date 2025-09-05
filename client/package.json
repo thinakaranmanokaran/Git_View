@@ -17,8 +17,10 @@
     "@tailwindcss/vite": "^4.0.9",
     "axios": "^1.9.0",
     "canvas-confetti": "^1.9.3",
+    "clsx": "^2.1.1",
     "file-saver": "^2.0.5",
     "jszip": "^3.10.1",
+    "motion": "^12.23.12",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-file-icon": "^1.6.0",
@@ -26,6 +28,7 @@
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.5.3",
     "react-syntax-highlighter": "^15.6.6",
+    "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.0.9"
   },
   "devDependencies": {

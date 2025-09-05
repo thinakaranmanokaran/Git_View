@@ -7,3 +7,7 @@ export { default as LoaderBar } from "./folder/LoaderBar";
 export { default as FolderHeader } from "./folder/Header";
 export { default as FolderNavigation } from "./folder/Navigation";
 export { default as FolderTitle } from "./folder/Title";
+
+export { default as RepoCard } from "./user/RepoCard";
+export { default as RepoList } from "./user/RepoList";
+export { default as UserHeader } from "./user/UserHeader";

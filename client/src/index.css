@@ -27,26 +27,47 @@
 
 @theme {
     /* fonts */
-    --font-sansheavy: "sansheavy", sans-serif; 
-    --font-sansnormal: "sansnormal", sans-serif; 
-    --font-general: "general", sans-serif; 
-    --font-generalbold: "generalbold", sans-serif; 
-    --font-pleinbold: "interblack", sans-serif; 
-    
+    --font-sansheavy: "sansheavy", sans-serif;
+    --font-sansnormal: "sansnormal", sans-serif;
+    --font-general: "general", sans-serif;
+    --font-generalbold: "generalbold", sans-serif;
+    --font-pleinbold: "interblack", sans-serif;
+
     /* colors */
-    --color-dark: #0C0C0C; 
-    --color-grey: #D9EAFD20; 
-    --color-blue: #A0DEFF; 
+    --color-dark: #0C0C0C;
+    --color-grey: #D9EAFD20;
+    --color-blue: #A0DEFF;
 
     /* borders */
     --border-1: border 1px solid;
 }
 
-.scrollbar-none{
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none;  /* Internet Explorer and Edge */
+@theme inline {
+    --animate-aurora: aurora 60s linear infinite;
+
+    @keyframes aurora {
+        from {
+            background-position:
+                50% 50%,
+                50% 50%;
+        }
+
+        to {
+            background-position:
+                350% 50%,
+                350% 50%;
+        }
+    }
+}
+
+.scrollbar-none {
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* Internet Explorer and Edge */
 }
 
 .scrollbar-none::-webkit-scrollbar {
-    display: none; /* Safari and Chrome */
+    display: none;
+    /* Safari and Chrome */
 }
