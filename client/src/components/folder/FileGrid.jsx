@@ -3,7 +3,7 @@ import images from "../../assets/images";
 
 const FileGrid = ({ files, username, repo, path, clearStates, isCodeFile }) => {
     return (
-        <ul className='w-full grid grid-cols-2 mx-2 my-6 md:grid-cols-8 gap-y-3 h-fit'>
+        <ul className='w-full grid grid-cols-2 mx-2 my-6 md:grid-cols-8 2xl:grid-cols-12 gap-y-3 h-fit'>
             {Array.isArray(files) && files
                 .sort((a, b) => {
                     if (a.type === 'dir' && b.type !== 'dir') return -1;

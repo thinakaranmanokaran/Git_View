@@ -10,7 +10,11 @@ import { saveAs } from 'file-saver';
 const FolderPage = () => {
     const { username, repo } = useParams();
     const location = useLocation();
-    const path = location.pathname.replace(`/${username}/${repo}`, '').replace(/^\/+/, '') || '';
+    const path = location.pathname
+        .replace(`/${username}/${repo}`, '')  // remove user/repo
+        .replace(/^\/+/, '')                  // clean slashes
+        .replace(/^tree\/[^/]+\/?/, '')      // remove "tree/{branch}/"
+        .replace(/^blob\/[^/]+\/?/, '');      // remove "blob/{branch}/"
 
     const [files, setFiles] = useState([]);
     const [fileContent, setFileContent] = useState(null);
@@ -244,7 +248,7 @@ const FolderPage = () => {
     return (
         <div className="bg-dark text-white min-h-screen py-2 overflow-x-hidden">
             <FolderTitle clearStates={clearStates} repo={repo} username={username} />
-            <FolderHeader clearStates={clearStates} path={path} repo={repo} username={username} handleDownloadFolder={handleDownloadFolder} isLoading={isLoading} />
+            <FolderHeader clearStates={clearStates} path={path} repo={repo} username={username} handleDownloadFolder={handleDownloadFolder} isLoading={isLoading} files={files} status={status} />
 
             {errorMessage ? (
                 <ErrorMessageBox errorMessage={errorMessage} errorCode={errorCode} username={username} fetchFiles={fetchFiles} />
