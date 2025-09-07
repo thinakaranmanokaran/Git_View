@@ -7,9 +7,9 @@ const Title = ({ clearStates, username, repo }) => {
             className="relative w-screen overflow-x-auto overflow-y-hidden scrollbar-none whitespace-nowrap"
         >
             {/* right side shadow effect */}
-            <div className="pointer-events-none fixed right-0 top-0 h-full w-12 bg-gradient-to-l from-black to-transparent" />
+            {/* <div className="pointer-events-none fixed right-0 top-0 h-full w-12 bg-gradient-to-l from-black to-transparent max-h-32" /> */}
 
-            <h2 className="pl-4 font-pleinbold tracking-tighter my-3 inline-block">
+            <h2 className="pl-4 font-pleinbold tracking-tighter my-3 pr-10 inline-block">
                 <Link
                     onClick={clearStates}
                     to={`/${username}/${repo}`}
