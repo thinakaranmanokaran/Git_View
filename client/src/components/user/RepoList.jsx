@@ -17,7 +17,7 @@ const RepoList = ({ repos }) => {
             return b.stargazers_count - a.stargazers_count;
         }
         if (sortType === "updated") {
-            return new Date(b.updated_at) - new Date(a.updated_at);
+            return new Date(b.pushed_at).getTime() - new Date(a.pushed_at).getTime();
         }
         if (sortType === "name") {
             return a.name.localeCompare(b.name);
@@ -31,7 +31,7 @@ const RepoList = ({ repos }) => {
             <div className="flex justify-end gap-3 mb-4 font-generallight tracking-wide">
                 <button
                     onClick={() => setSortType("name")}
-                    className={`px-3 py-2 rounded-xl text-sm font-medium flex items-center justify-center gap-x-1 transition ${sortType === "name"
+                    className={`px-3 py-2 rounded-xl text-sm font-medium flex items-center justify-center gap-x-1 transition cursor-pointer ${sortType === "name"
                         ? "bg-[#FCC6FF] text-black"
                         : "bg-[#ffffff10] text-gray-300 hover:bg-[#ffffff20]"
                         }`}
@@ -44,7 +44,7 @@ const RepoList = ({ repos }) => {
                 </button>
                 <button
                     onClick={() => setSortType("stars")}
-                    className={`px-3 py-2 rounded-xl text-sm font-medium flex items-center justify-center gap-x-1 transition ${sortType === "stars"
+                    className={`px-3 py-2 rounded-xl text-sm font-medium flex items-center justify-center gap-x-1 transition cursor-pointer ${sortType === "stars"
                         ? "bg-[#FFD700] text-black"
                         : "bg-[#ffffff10] text-gray-300 hover:bg-[#ffffff20]"
                         }`}
@@ -58,7 +58,7 @@ const RepoList = ({ repos }) => {
 
                 <button
                     onClick={() => setSortType("updated")}
-                    className={`px-3 py-2 rounded-xl text-sm font-medium flex items-center justify-center gap-x-1 transition ${sortType === "updated"
+                    className={`px-3 py-2 rounded-xl text-sm font-medium flex items-center justify-center gap-x-1 transition cursor-pointer ${sortType === "updated"
                         ? "bg-[#FF9149] text-black"
                         : "bg-[#ffffff10] text-gray-300 hover:bg-[#ffffff20]"
                         }`}

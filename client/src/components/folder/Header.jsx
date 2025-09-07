@@ -19,6 +19,7 @@ const Header = ({
     const [searchResults, setSearchResults] = useState([]);
     const [allFiles, setAllFiles] = useState([]); // 🔥 store full repo tree
     const searchRef = useRef(null);
+    const inputRef = useRef(null); // add ref for input
     const [avatar, setAvatar] = useState(""); // 🔥 store avatar
 
     const API_URL = import.meta.env.VITE_API_URL;
@@ -90,7 +91,13 @@ const Header = ({
     }, []);
 
     const toggleSearchBar = () => {
-        setSearchBar(!searchBar);
+        setSearchBar((prev) => {
+            const newState = !prev;
+            if (!prev) {
+                setTimeout(() => inputRef.current?.focus(), 50); // focus when opening
+            }
+            return newState;
+        });
         setSearchQuery("");
         setSearchResults([]);
     };
@@ -100,7 +107,8 @@ const Header = ({
         const handleShortcut = (e) => {
             if (e.ctrlKey && e.key.toLowerCase() === "k") {
                 e.preventDefault();
-                toggleSearchBar();
+                setSearchBar(true);
+                setTimeout(() => inputRef.current?.focus(), 50); // auto-focus
             }
         };
 
@@ -150,6 +158,7 @@ const Header = ({
                         onClick={toggleSearchBar}
                     />
                     <input
+                        ref={inputRef}   // attach ref here
                         type="text"
                         placeholder="Search repo..."
                         value={searchQuery}

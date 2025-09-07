@@ -87,14 +87,14 @@ const Hero = () => {
                     <div className="flex justify-center items-center h-screen bg-cover bg-center">
                         <div className="flex flex-col items-center text-center space-y-8 relative z-10 animate-fade-in">
                             <div className="space-y-3">
-                                <h1 className="text-4xl md:text-6xl font-bold tracking-tighter max-w-3xl mx-auto">
+                                <h1 className="text-4xl md:text-6xl font-bold tracking-tighter max-w-3xl mx-auto dark:text-white">
                                     A{" "}
                                     <span className="bg-gradient-to-r from-[#2463EB] to-[#5D2DE6] bg-clip-text text-transparent pr-1">
                                         smarter way
                                     </span>{" "}
                                     to browse your GitHub repos
                                 </h1>
-                                <p className="text-lg md:text-lg mt-6 text-[#64748B] max-w-[700px] mx-auto font-general">
+                                <p className="text-lg md:text-lg mt-6 text-[#64748B] dark:text-gray-300 max-w-[700px] mx-auto font-general">
                                     Git View gives you a minimalist, beautiful interface to explore repositories, branches, and code with ease.
                                 </p>
                             </div>
@@ -111,7 +111,7 @@ const Hero = () => {
                                         }
                                     }}
                                     // when it has a value just w-full otherwise max-w-sm
-                                    className={`w-full h-full px-8 py-4 ${query ? "max-w-full" : "max-w-sm"} focus:max-w-full transition-all duration-300 ease-in-out rounded-full border border-black focus:outline-none`}
+                                    className={`w-full h-full px-8 py-4 ${query ? "max-w-full" : "max-w-sm"} focus:max-w-full transition-all duration-300 ease-in-out rounded-full border border-black dark:border-gray-400 dark:text-white focus:outline-none`}
                                     placeholder="Search GitHub username..."
                                 />
                                 {loading ? (
