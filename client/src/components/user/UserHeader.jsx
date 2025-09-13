@@ -3,6 +3,7 @@ import { LuBadgeCheck } from "react-icons/lu";
 import { HiBadgeCheck } from "react-icons/hi";
 import { FaStar, FaBook, FaUserFriends, FaUserPlus } from "react-icons/fa";
 import { GoProjectSymlink } from "react-icons/go";
+import { FiGithub } from "react-icons/fi";
 
 const UserHeader = ({ user }) => {
     return (
@@ -19,7 +20,7 @@ const UserHeader = ({ user }) => {
                     {user.login === "thinakaranmanokaran" && <HiBadgeCheck className="text-blue-300 w-8 h-8" title="Developer" />}
                 </div>
                 {user.bio && <p className="text-gray-400 font-generallight text-xl max-w-2xl my-4 mb-5 ">{user.bio}</p>}
-                <p className="font-general text-lg flex flex-wrap gap-2">
+                <p className="font-general text-lg flex flex-wrap gap-2 items-center">
                     {/* Public Repos */}
                     { user.public_repos > 0 && <span className="bg-[#FF9149] px-4 py-1 flex items-center gap-x-2 rounded-full text-black w-fit">
                         <FaBook /> {user.public_repos} Repos
@@ -39,6 +40,9 @@ const UserHeader = ({ user }) => {
                     { user.following > 0 && <span className="bg-[#FCC6FF] px-4 py-1 flex items-center gap-x-2 rounded-full text-black w-fit">
                         <FaUserPlus /> {user.following} Following
                     </span>}
+                    <div className='ml-4 flex items-center  '>
+                        <a href={`https://github.com/${user.login}`} target="_blank" rel="noopener noreferrer" className=' bg-[#ffffff20] p-2.5 rounded-xl hover:scale-105 transition-transform duration-300 '><FiGithub /></a>
+                    </div>
                 </p>
             </div>
         </div>

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import { FaStar, FaBook, FaUserFriends, FaUserPlus } from "react-icons/fa";
 import { VscRepoForked } from "react-icons/vsc";
+import { FiGithub } from "react-icons/fi";
 
 const RepoCard = ({ repo }) => {
 
@@ -45,20 +46,25 @@ const RepoCard = ({ repo }) => {
     return (
         <div className="bg-[#191919] rounded-2xl p-6 font-general tracking-wide shadow hover:shadow-md transition flex flex-col justify-between ">
             <div>
-                <div className="flex space-x-2">
-                    <Link to={`/${repo.owner.login}/${repo.name}`}>
-                        <h2 className="text-lg font-semibold text-blue-400 hover:underline">
-                            {repo.name}
-                        </h2>
-                    </Link>
-                    {
-                        repo.homepage && (<a href={repo.homepage} target="_blank" rel="noopener noreferrer" className="inline-block bg-[#FCC6FF] text-xs px-2 py-1 text-black rounded-full mt-1">Live Link</a>)
-                    }
-                    {repo.fork && (
-                        <span className="inline-block bg-[#FF9149] text-xs px-2 py-1 text-black rounded-full mt-1">
-                            Forked
-                        </span>
-                    )}
+                <div className="flex space-x-2 justify-between">
+                    <div className="flex space-x-2 h-fit ">
+                        <Link to={`/${repo.owner.login}/${repo.name}`}>
+                            <h2 className="text-lg font-semibold text-blue-400 hover:underline">
+                                {repo.name}
+                            </h2>
+                        </Link>
+                        {
+                            repo.homepage && (<a href={repo.homepage} target="_blank" rel="noopener noreferrer" className="inline-block bg-[#FCC6FF] text-xs px-2 py-1 text-black rounded-full mt-1">Live Link</a>)
+                        }
+                        {repo.fork && (
+                            <span className="inline-block bg-[#FF9149] text-xs px-2 py-1 text-black rounded-full mt-1">
+                                Forked
+                            </span>
+                        )}
+                    </div>
+                    <div className='ml-4 flex items-center  '>
+                        <a href={`https://github.com/${repo.owner.login}/${repo.name}`} target="_blank" rel="noopener noreferrer" className=' text-[#ffffff40] hover:text-white hover:bg-[#ffffff20] p-2.5 rounded-xl hover:scale-105 transition-all duration-300 '><FiGithub /></a>
+                    </div>
                 </div>
                 <p className="text-sm text-gray-400 mt-2">
                     {repo.description || 'No description'}

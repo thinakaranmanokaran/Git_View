@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import DownloadButton from "./DownloadButton";
 import { LuSearch } from "react-icons/lu";
 import axios from "axios";
+import { FiGithub } from "react-icons/fi";
 
 const Header = ({
     username,
@@ -198,6 +199,9 @@ const Header = ({
                         <img src={avatar} alt="Profile" className="w-6 h-6 rounded-full mr-1 " />
                         Profile
                     </Link>
+                    <a href={`https://github.com//${username}/${repo}`} target="_blank" rel="noopener noreferrer" className={` px-3 py-2 bg-grey text-white cursor-pointer rounded-xl transition-all duration-300 md:flex hidden justify-center disabled:cursor-not-allowed disabled:hover:scale-100 hover:scale-105 items-center `}>
+                        <FiGithub />
+                    </a>
                 </div>
             </div>
         </div>
