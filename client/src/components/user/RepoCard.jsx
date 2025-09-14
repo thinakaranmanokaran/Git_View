@@ -62,21 +62,24 @@ const RepoCard = ({ repo }) => {
                             </span>
                         )}
                     </div>
-                    <div className='ml-4 flex items-center  '>
-                        <a href={`https://github.com/${repo.owner.login}/${repo.name}`} target="_blank" rel="noopener noreferrer" className=' text-[#ffffff40] hover:text-white hover:bg-[#ffffff20] p-2.5 rounded-xl hover:scale-105 transition-all duration-300 '><FiGithub /></a>
-                    </div>
+
                 </div>
                 <p className="text-sm text-gray-400 mt-2">
                     {repo.description || 'No description'}
                 </p>
             </div>
-            <p className="text-sm text-gray-500 mt-3 flex  justify-between">
-                <div>
-                    <FaStar className="inline-block" /> {repo.stargazers_count} • <VscRepoForked className="inline-block text-base" /> {repo.forks_count}
+            <p className="text-sm text-gray-500 mt-3 flex items-center justify-between">
+                <div className="space-x-2 flex items-center">
+                    <div>
+                        <FaStar className="inline-block" /> {repo.stargazers_count} • <VscRepoForked className="inline-block text-base" /> {repo.forks_count}
+                    </div>
+                    <a href={`https://github.com/${repo.owner.login}/${repo.name}`} target="_blank" rel="noopener noreferrer" className=' text-[#ffffff40] hover:text-white hover:bg-[#ffffff20] p-2.5 rounded-xl hover:scale-105 transition-all duration-300 text-base'><FiGithub /></a>
                 </div>
-                <p className="text-xs text-gray-400">
-                    Last updated: {timeAgo}
-                </p>
+                <div className='space-x-2 flex items-center  '>
+                    <p className="text-xs text-gray-400">
+                        Last updated: {timeAgo}
+                    </p>
+                </div>
 
             </p>
         </div>
