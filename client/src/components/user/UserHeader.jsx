@@ -19,25 +19,25 @@ const UserHeader = ({ user }) => {
                     {user.name && <h1 className="text-4xl font-intermid tracking-tight text-gray-400 ">{user.login}</h1>}
                     {user.login === "thinakaranmanokaran" && <HiBadgeCheck className="text-blue-300 w-8 h-8" title="Developer" />}
                 </div>
-                {user.bio && <p className="text-gray-400 font-generallight text-xl max-w-2xl my-4 mb-5 ">{user.bio}</p>}
-                <p className="font-general text-lg flex flex-wrap gap-2 items-center">
+                {user.bio && <p className="text-white/80 font-generallight text-xl max-w-2xl my-4 mb-5 ">{user.bio}</p>}
+                <p className="font-general text-sm flex flex-wrap gap-2 items-center">
                     {/* Public Repos */}
-                    { user.public_repos > 0 && <span className="bg-[#FF9149] px-4 py-1 flex items-center gap-x-2 rounded-full text-black w-fit">
+                    { user.public_repos > 0 && <span className="bg-[#FF9149] px-4 py-2 flex items-center gap-x-1 rounded-full text-black w-fit">
                         <FaBook /> {user.public_repos} Repos
                     </span>}
 
                     {/* Total Stars */}
-                    { user.total_stars > 0 && <span className="bg-yellow-300 px-4 py-1 flex items-center gap-x-2 rounded-full text-black w-fit">
+                    { user.total_stars > 0 && <span className="bg-yellow-300 px-4 py-2 flex items-center gap-x-1 rounded-full text-black w-fit">
                         <FaStar /> {user.total_stars || 0} Stars
                     </span>}
 
                     {/* Followers */}
-                    { user.followers > 0 && <span className="bg-[#60B5FF] px-4 py-1 flex items-center gap-x-2 rounded-full text-black w-fit">
+                    { user.followers > 0 && <span className="bg-[#60B5FF] px-4 py-2 flex items-center gap-x-1 rounded-full text-black w-fit">
                         <FaUserFriends /> {user.followers} Followers
                     </span>}
 
                     {/* Following */}
-                    { user.following > 0 && <span className="bg-[#FCC6FF] px-4 py-1 flex items-center gap-x-2 rounded-full text-black w-fit">
+                    { user.following > 0 && <span className="bg-[#FCC6FF] px-4 py-2 flex items-center gap-x-1 rounded-full text-black w-fit">
                         <FaUserPlus /> {user.following} Following
                     </span>}
                     <div className='ml-4 flex items-center  '>
